@@ -12,6 +12,7 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 const posts = []
+const port = process.env.PORT || 3000
 
 
 
@@ -61,4 +62,4 @@ app.post('/compose', (req, res) => {
 
 
 
-app.listen(process.env.PORT, console.log(`Server is running on port ${process.env.PORT}`));
+app.listen(port, console.log(`Server is running on port ${port}`));
