@@ -31,7 +31,13 @@ app.use(express.static("public"));
 
 
 app.get('/', (req, res) => {
-  res.render('home', { startingContent: homeStartingContent, posts: posts })
+  Post.find().then((post) => {
+    console.log(post.content);
+    // res.render('home', { startingContent: homeStartingContent, posts: post })
+  }).catch((err) => {
+    console.log("Failed to get post from database");
+  })
+
 })
 app.get('/about', (req, res) => {
   res.render('about', { startingContent: aboutContent })
@@ -66,7 +72,21 @@ app.post('/compose', (req, res) => {
   if (!newPost.body || !newPost.title) {
     res.redirect('/compose')
   } else {
-    const newPost = 
+    const pushNewPost = new Post({
+      title: newPost.title,
+      content: newPost.body
+    })
+    pushNewPost.save().then(
+      function () {
+        res.redirect('/')
+        console.log("New post pushed to database");
+      }
+    ).catch(
+      function (err) {
+        res.redirect('/compose')
+        console.log("failed to push post to database");
+      }
+    )
   }
 })
 
