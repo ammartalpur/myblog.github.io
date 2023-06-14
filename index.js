@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const mongoose = require('mongoose')
 const _ = require('lodash')
 
 
@@ -14,7 +15,14 @@ const app = express();
 const posts = []
 const port = process.env.PORT || 3000
 
+mongoose.connect('mongodb://localhost:27017/blogDB')
+const db = mongoose.connection;
 
+const postSchema = new mongoose.Schema({
+  title: String,
+  content: String
+})
+const Post = mongoose.model("Post", postSchema)
 
 app.set('view engine', 'ejs');
 
@@ -51,15 +59,22 @@ app.get('/posts/:title', (req, res) => {
 })
 
 app.post('/compose', (req, res) => {
-  const post = {
+  const newPost = {
     title: req.body.postTitle,
     body: req.body.postBody
   }
-  posts.push(post)
-  res.redirect('/')
+  if (!newPost.body || !newPost.title) {
+    res.redirect('/compose')
+  } else {
+    const newPost = 
+  }
 })
 
 
 
+db.on('error', console.error.bind(console, 'Server is failed to connect to database'))
+db.on('open', function () {
+  console.log("Server is connected to database");
+  app.listen(port, console.log(`Server is running on port ${port}`));
+})
 
-app.listen(port, console.log(`Server is running on port ${port}`));
