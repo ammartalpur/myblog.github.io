@@ -7,15 +7,38 @@ const mongoose = require('mongoose')
 const _ = require('lodash')
 
 
-const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
-const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
-const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
+const homeStartingContent = "At Daily Journal, we strive to provide you with a diverse range of engaging and thought-provoking content. Our blog covers a wide array of topics, including technology, science, lifestyle, current events, and more. We aim to keep you informed, entertained, and inspired with our daily articles.";
+const aboutContent =
+  `Welcome to Daily Journal!
+
+At Daily Journal, we strive to provide you with a diverse range of engaging and thought - provoking content.Our blog covers a wide array of topics, including technology, science, lifestyle, current events, and more.We aim to keep you informed, entertained, and inspired with our daily articles.
+
+Here are some of the exciting content you can expect from Daily Journal:
+
+Tech and Innovation: Stay up - to - date with the latest advancements in technology, including artificial intelligence, blockchain, virtual reality, and emerging trends that are shaping our digital future.
+
+Science and Discoveries: Delve into the fascinating world of scientific research, breakthroughs, and discoveries across various disciplines, such as space exploration, medicine, environmental science, and beyond.
+
+Lifestyle and Wellness: Explore articles on health, fitness, nutrition, mindfulness, and self - improvement.Discover tips, tricks, and inspiration for leading a balanced and fulfilling lifestyle.
+
+Current Events and Commentary: Get insights and analysis on important global events, social issues, and cultural trends.Engage in thought - provoking discussions and gain a deeper understanding of the world around us.
+
+Travel and Adventure: Embark on virtual journeys through our travel articles, uncovering hidden gems, exploring diverse cultures, and gathering tips for planning your own adventures.
+
+Book and Movie Reviews: Dive into our reviews of the latest literary releases and cinematic masterpieces.Discover captivating stories and gain recommendations for your next reading or movie - watching session.
+
+Personal Stories and Inspirational Interviews: Read inspiring personal stories and interviews with individuals who have made a difference, overcome challenges, or are leading innovative initiatives in their respective fields.
+
+We are committed to providing you with high - quality content that sparks curiosity, promotes critical thinking, and encourages meaningful conversations.So, bookmark Daily Journal and join us on this exciting journey of exploration and enlightenment.
+
+Remember to check back daily for fresh articles, and feel free to engage with our content by leaving comments and sharing your thoughts.Stay curious, stay informed, and let Daily Journal be your daily dose of inspiration!`;
+const contactContent = "You can content the Developer of this company: knowtalpur@gmail.com";
 
 const app = express();
 const posts = []
 const port = process.env.PORT || 3000
 
-mongoose.connect('mongodb://localhost:27017/blogDB')
+mongoose.connect('mongodb+srv://ammar:9o0C25fsSTShtObb@ammar.z1dmemi.mongodb.net/?retryWrites=true&w=majority')
 const db = mongoose.connection;
 
 const postSchema = new mongoose.Schema({
@@ -32,8 +55,8 @@ app.use(express.static("public"));
 
 app.get('/', (req, res) => {
   Post.find().then((post) => {
-    console.log(post.content);
-    // res.render('home', { startingContent: homeStartingContent, posts: post })
+    // console.log(post);
+    res.render('home', { startingContent: homeStartingContent, posts: post })
   }).catch((err) => {
     console.log("Failed to get post from database");
   })
@@ -53,13 +76,18 @@ app.get("/compose", (req, res) => {
 
 app.get('/posts/:title', (req, res) => {
   let requestedTitle = _.lowerCase(req.params.title);
-  posts.forEach((posts) => {
-    let storedTitle = _.lowerCase(posts.title)
-    if (requestedTitle == storedTitle) {
-      res.render('postpage', { title: posts.title, post: posts.body })
-    } else {
-      console.log("Not a match");
-    }
+  Post.find().then((posts) => {
+    posts.forEach((posts) => {
+      let storedTitle = _.lowerCase(posts.title)
+      if (requestedTitle == storedTitle) {
+        // console.log(pots.contect);
+        res.render('postpage', { title: posts.title, post: posts.content })
+      } else {
+        console.log("Not a match");
+      }
+    })
+  }).catch((err) => {
+    console.log("failed to get post from database");
   })
 
 })
