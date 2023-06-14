@@ -38,7 +38,7 @@ const app = express();
 const posts = []
 const port = process.env.PORT || 3000
 
-mongoose.connect('mongodb+srv://dailyjournal:4UE6kI6sgJuLlyV6@ammar.z1dmemi.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://ammar:QcTOSFzo5GXmXO8C@ammar.z1dmemi.mongodb.net/blogDB?retryWrites=true&w=majority')
 const db = mongoose.connection;
 
 const postSchema = new mongoose.Schema({
