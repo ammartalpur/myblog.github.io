@@ -36,9 +36,9 @@ const contactContent = "You can content the Developer of this company: knowtalpu
 
 const app = express();
 const posts = []
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 
-mongoose.connect('mongodb+srv://ammar:QcTOSFzo5GXmXO8C@ammar.z1dmemi.mongodb.net/blogDB?retryWrites=true&w=majority')
+mongoose.connect(process.env.DB)
 const db = mongoose.connection;
 
 const postSchema = new mongoose.Schema({
